@@ -47,7 +47,7 @@ class RouteServiceProvider extends ServiceProvider
 				->namespace($this->namespace)
 				->group(base_path('routes/web.php'));
 			Route::prefix('dashboard')
-				->middleware(['web', 'auth:sanctum', 'verified'])
+				->middleware(['web', 'auth:sanctum'])
 				->namespace($this->namespace)
 				->group(base_path('routes/dashboard.php'));
 		});

@@ -43,7 +43,8 @@ use Illuminate\Support\Facades\Validator;
  *    response=200,
  *    description="Рассчет стоимости произведен",
  *    @OA\JsonContent(
- *       @OA\Property(property="cost", type="number", format="float", example="8022")
+ *       @OA\Property(property="cost", type="number", format="float", example="8022"),
+ *       @OA\Property(property="method", type="string", example="weigh|volume"),
  *        )
  *     ),
  * )

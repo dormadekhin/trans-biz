@@ -51,7 +51,7 @@
                 },
                 "responses": {
                     "422": {
-                        "description": "Отсутствует необходимая информация для рассчета",
+                        "description": "Некорректный запрос для рассчета стоимости",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -86,6 +86,10 @@
                                             "type": "number",
                                             "format": "float",
                                             "example": "8022"
+                                        },
+                                        "method": {
+                                            "type": "string",
+                                            "example": "weigh|volume"
                                         }
                                     },
                                     "type": "object"
