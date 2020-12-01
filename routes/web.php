@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\RateItem;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +15,34 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+	$cityFrom = 1;
+	$cityTo = 2;
+	$weight = 10;
+	$volume = 5.01;
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia\Inertia::render('Dashboard');
-})->name('dashboard');
+	$weightPrice = $volumePrice = 0;
+	if ($weight) {
+		$rate = RateItem::where([
+			['city_from_id', $cityFrom],
+			['city_to_id', $cityTo],
+			['weight_from', '<=', $weight],
+			['weight_to', '>=', $weight],
+		])->orderBy('weight_from')
+			->first();
+		$weightPrice = $rate->price ?: 0;
+	}
+
+	if ($volume) {
+		$rate = RateItem::where([
+			['city_from_id', $cityFrom],
+			['city_to_id', $cityTo],
+			['volume_from', '<=', $volume],
+			['volume_to', '>=', $volume],
+		])->orderBy('volume_from')
+			->first();
+		$volumePrice = $rate->price ?: 0;
+	}
+
+	dump($weightPrice, $volumePrice);
+
+});

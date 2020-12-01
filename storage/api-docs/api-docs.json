@@ -1,0 +1,113 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Рассчет стоимости доставки",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/calculate": {
+            "post": {
+                "tags": [
+                    "calculate"
+                ],
+                "summary": "Рассчет стоимости доставки",
+                "description": "Рассчет стоимости доставки по переданным параметрам",
+                "operationId": "calculate",
+                "requestBody": {
+                    "description": "Передайте параметры для рассчета",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cityTo",
+                                    "weight",
+                                    "volume"
+                                ],
+                                "properties": {
+                                    "cityFrom": {
+                                        "type": "string",
+                                        "example": "Новосибирск"
+                                    },
+                                    "cityTo": {
+                                        "type": "string",
+                                        "example": "Новокузнецк"
+                                    },
+                                    "weight": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "25"
+                                    },
+                                    "volume": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": "0.2"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "422": {
+                        "description": "Отсутствует необходимая информация для рассчета",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Некорректные данные для рассчета."
+                                        },
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "example": [
+                                                "Неверное значение cityFrom.",
+                                                "Вес должен быть числом."
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Рассчет стоимости произведен",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "cost": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": "8022"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearer_token": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}
