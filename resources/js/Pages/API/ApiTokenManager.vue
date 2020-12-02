@@ -175,6 +175,8 @@
 </template>
 
 <script>
+const dayjs =  require('dayjs');
+
 import JetActionMessage from '@/Jetstream/ActionMessage'
 import JetActionSection from '@/Jetstream/ActionSection'
 import JetButton from '@/Jetstream/Button'
@@ -275,7 +277,7 @@ export default {
 		},
 
 		fromNow(timestamp) {
-			return moment(timestamp).local().fromNow()
+			return dayjs(timestamp).format('DD.MM.YYYY HH:mm:ss');
 		},
 	},
 }

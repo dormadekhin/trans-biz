@@ -5,7 +5,7 @@
 				<nav class="bg-white border-gray-100">
 					<div class="md:flex md:flex-shrink-0">
 						<div
-							class="bg-blue-900 md:flex-shrink-0 md:w-56 px-6 py-4 flex items-center justify-between md:justify-center">
+							class="bg-blue-800 md:flex-shrink-0 md:w-56 px-6 py-4 flex items-center justify-between md:justify-center">
 							<!-- Logo -->
 							<div class="flex-shrink-0 flex items-center">
 								<inertia-link :href="route('dashboard')">
