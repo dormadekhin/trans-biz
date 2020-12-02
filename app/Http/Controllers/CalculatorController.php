@@ -2,55 +2,53 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\City;
 use App\Models\RateItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-/**
- * @OA\Post(
- * path="/api/calculate",
- * summary="Рассчет стоимости доставки",
- * description="Рассчет стоимости доставки по переданным параметрам",
- * operationId="calculate",
- * tags={"calculate"},
- * @OA\RequestBody(
- *    required=true,
- *    description="Передайте параметры для рассчета",
- *    @OA\JsonContent(
- *       required={"cityTo","weight","volume"},
- *       @OA\Property(property="cityFrom", type="string", example="Новосибирск"),
- *       @OA\Property(property="cityTo", type="string", example="Новокузнецк"),
- *       @OA\Property(property="weight", type="number", format="float", example="25"),
- *       @OA\Property(property="volume", type="number", format="float", example="0.2"),
- *    ),
- * ),
- * @OA\Response(
- *    response=422,
- *    description="Некорректный запрос для рассчета стоимости",
- *    @OA\JsonContent(
- *       @OA\Property(property="message", type="string", example="Некорректные данные для рассчета."),
- *       @OA\Property(property="errors", type="array",
- *                      @OA\Items(
- *                          type="string",
- *                      ),
- *                          example={"Неверное значение cityFrom.","Вес должен быть числом."},
- *     ),
- * ),
- *     ),
- * @OA\Response(
- *    response=200,
- *    description="Рассчет стоимости произведен",
- *    @OA\JsonContent(
- *       @OA\Property(property="cost", type="number", format="float", example="8022"),
- *       @OA\Property(property="method", type="string", example="weigh|volume"),
- *        )
- *     ),
- * )
- */
 class CalculatorController extends Controller
 {
+
+	/**
+	 * @OA\Post(
+	 *  path="/api/calculate",
+	 *  summary="Рассчет стоимости доставки",
+	 *  description="Рассчет стоимости доставки по переданным параметрам",
+	 *  operationId="calculate",
+	 *  tags={"calculate"},
+	 *  @OA\RequestBody(
+	 *    required=true,
+	 *    description="Передайте параметры для рассчета",
+	 *    @OA\JsonContent(
+	 *       required={"cityTo","weight","volume"},
+	 *       @OA\Property(property="cityFrom", type="string", example="Новосибирск"),
+	 *       @OA\Property(property="cityTo", type="string", example="Новокузнецк"),
+	 *       @OA\Property(property="weight", type="number", format="float", example="25"),
+	 *       @OA\Property(property="volume", type="number", format="float", example="0.2"),
+	 *    ),
+	 *  ),
+	 *  @OA\Response(
+	 *    response=422,
+	 *    description="Некорректный запрос для рассчета стоимости",
+	 *    @OA\JsonContent(
+	 *       @OA\Property(property="message", type="string", example="Некорректные данные для рассчета."),
+	 *       @OA\Property(property="errors", type="array", example={"Неверное значение cityFrom.","Вес должен быть числом."},
+	 *                   @OA\Items(type="string"),
+	 *              ),
+	 *    ),
+	 *  ),
+	 *  @OA\Response(
+	 *    response=200,
+	 *    description="Рассчет стоимости произведен",
+	 *    @OA\JsonContent(
+	 *       @OA\Property(property="cost", type="number", format="float", example="8022"),
+	 *       @OA\Property(property="method", type="string", example="weigh|volume"),
+	 *    )
+	 *  ),
+	 *)
+	 */
 	public function index(Request $request)
 	{
 		$validator = Validator::make($request->all(), [
@@ -117,5 +115,33 @@ class CalculatorController extends Controller
 			'price' => $weightPrice,
 			'method' => 'weight',
 		]);
+	}
+
+	/**
+	 * @OA\Get(
+	 * path="/api/cities",
+	 * summary="Список городов",
+	 * description="Список городов доступных для доставки",
+	 * operationId="cities",
+	 * tags={"cities"},
+	 * @OA\Response(
+	 *      response=200,
+	 *      description="Список доступных городов",
+	 *      @OA\JsonContent(
+	 *          type="array",
+	 *          @OA\Items(type="string"),
+	 *          example={"Томск", "Северск (до КПП)"},
+	 *      ),
+	 * ),
+	 *)
+	 */
+	public function cities()
+	{
+		return City::where('to', true)
+			->whereExists(function ($query) {
+				$query->select(DB::raw(1))
+					->from('rate_items')
+					->whereRaw('rate_items.city_to_id = cities.id');
+			})->pluck('name');
 	}
 }

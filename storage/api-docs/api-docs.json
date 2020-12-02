@@ -99,6 +99,35 @@
                     }
                 }
             }
+        },
+        "/api/cities": {
+            "get": {
+                "tags": [
+                    "cities"
+                ],
+                "summary": "Список городов",
+                "description": "Список городов доступных для доставки",
+                "operationId": "cities",
+                "responses": {
+                    "200": {
+                        "description": "Список доступных городов",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": [
+                                    "Томск",
+                                    "Северск (до КПП)"
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {

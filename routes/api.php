@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/calculate', [CalculatorController::class, 'index']);
+Route::get('/cities', [CalculatorController::class, 'cities']);
