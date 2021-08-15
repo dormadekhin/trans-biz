@@ -17,6 +17,13 @@
 				</div>
 			</inertia-link>
 		</div>
+		<div class="">
+			<inertia-link class="flex items-center group p-3" :href="route('rates.import')">
+				<div :class="isUrl('dashboard/rates/import') ? 'text-white' : 'text-blue-300 group-hover:text-white'">
+					Импорт
+				</div>
+			</inertia-link>
+		</div>
 	</div>
 </template>
 

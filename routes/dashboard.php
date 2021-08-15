@@ -63,3 +63,9 @@ Route::delete('rates/{id}', [RateItemController::class, 'destroy'])
 Route::put('rates/{id}/restore', [RateItemController::class, 'restore'])
 	->where('id', '[0-9]+')
 	->name('rates.restore');
+
+Route::get('rates/import', [RateItemController::class, 'import'])
+	->name('rates.import');
+
+Route::post('rates/importing', [RateItemController::class, 'importing'])
+	->name('rates.importing');

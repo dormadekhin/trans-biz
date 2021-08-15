@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\RateItem;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class RateItemController extends CrudController
 {
@@ -46,7 +50,7 @@ class RateItemController extends CrudController
 		'weight_to' => null,
 		'volume_from' => null,
 		'volume_to' => null,
-		'price' => null
+		'price' => null,
 	];
 
 	public array $createRequestValidate = [
@@ -82,6 +86,31 @@ class RateItemController extends CrudController
 			'cityFrom' => array_values($cities->where('from', true)->map(fn($item) => $item->only(['id', 'name']))->toArray()),
 			'cityTo' => array_values($cities->where('to', true)->map(fn($item) => $item->only(['id', 'name']))->toArray()),
 		];
+	}
+
+	public function import()
+	{
+		return Inertia::render('Import/Index', [
+			'baseRoute' => [
+				'route' => $this->routeKey,
+				'title' => $this->getControllerTitle(),
+				'action' => 'importing',
+			],
+		]);
+	}
+
+	public function importing(Request $request)
+	{
+		$request->validate([
+			'file' => 'required|mimes:xlsx,xls|max:2048',
+		]);
+		if (
+			($file = $request->file('file'))
+			&& (\App\Actions\My\ImportXlsAction::import($file))
+		) {
+			return Redirect::route($this->routeKey)->with('success', 'Файл успешно импортирован');
+		}
+		return Redirect::route('rates.import')->with('error', 'Не удалось импортировать файл');
 	}
 
 	public function getControllerTitle(): string
