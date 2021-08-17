@@ -1,6 +1,10 @@
 <template>
 	<div>
 		<h1 class="mb-8 font-bold text-3xl">Импорт тарифной сетки из файла</h1>
+		<p>Пример корректного файла для загрузки тарифной сетки
+			<a href="/dashboard/rates/download" download
+			   class="text-blue-700 hover:text-blue-800 font-bold">скачать</a>
+		</p>
 		<div class="bg-white rounded shadow overflow-hidden max-w-4xl">
 			<form @submit.prevent="submit">
 				<div class="p-4 pb-0 flex flex-wrap">

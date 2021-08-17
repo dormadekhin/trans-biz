@@ -69,3 +69,7 @@ Route::get('rates/import', [RateItemController::class, 'import'])
 
 Route::post('rates/importing', [RateItemController::class, 'importing'])
 	->name('rates.importing');
+
+
+Route::get('rates/download', [RateItemController::class, 'download'])
+	->name('rates.download');

@@ -117,4 +117,9 @@ class RateItemController extends CrudController
 	{
 		return 'Тарифы';
 	}
+
+	public function download()
+	{
+		return response()->download(storage_path('app/price.xls'));
+	}
 }
